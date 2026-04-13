@@ -198,22 +198,83 @@
     /* SCREENSHOTS */
     .screenshots-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.25rem; margin-top: 1.5rem;
     }
     .screenshot-card {
       background: #fff; border: 1px solid var(--border);
       border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
     }
+    .screenshot-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(15,110,86,0.1); }
     .screenshot-thumb {
       height: 200px; background: var(--cream-dark);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.8rem; color: var(--ink-light);
       border-bottom: 1px solid var(--border);
-      overflow: hidden;
+      overflow: hidden; position: relative;
     }
     .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .screenshot-thumb .zoom-hint {
+      position: absolute; inset: 0;
+      background: rgba(15,110,86,0.0);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .screenshot-card:hover .zoom-hint { background: rgba(15,110,86,0.12); }
+    .zoom-hint span {
+      background: rgba(255,255,255,0.9); color: var(--teal);
+      font-size: 0.75rem; font-weight: 500; padding: 4px 10px;
+      border-radius: 100px; opacity: 0; transition: opacity 0.2s;
+    }
+    .screenshot-card:hover .zoom-hint span { opacity: 1; }
     .screenshot-caption { padding: 0.75rem 1rem; font-size: 0.82rem; color: var(--ink-mid); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.85);
+      align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { position: relative; max-width: 90vw; max-height: 90vh; }
+    .lightbox-inner img { max-width: 100%; max-height: 90vh; border-radius: 8px; display: block; }
+    .lightbox-caption {
+      text-align: center; color: rgba(255,255,255,0.6);
+      font-size: 0.82rem; margin-top: 0.75rem;
+    }
+    .lightbox-close {
+      position: absolute; top: -16px; right: -16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #fff; border: none; cursor: pointer;
+      font-size: 1rem; color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .lightbox-close:hover { background: var(--cream-dark); }
+
+    /* POLICY PILLARS */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .pillar-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      border-top: 3px solid var(--teal);
+    }
+    .pillar-card:nth-child(2) { border-top-color: #1A56DB; }
+    .pillar-card:nth-child(3) { border-top-color: #C0392B; }
+    .pillar-card:nth-child(4) { border-top-color: #D4A017; }
+    .pillar-card:nth-child(5) { border-top-color: #6B3FA0; }
+    .pillar-card:nth-child(6) { border-top-color: #E67E22; }
+    .pillar-title {
+      font-family: var(--serif); font-size: 1rem;
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .pillar-card p { font-size: 0.82rem; color: var(--ink-mid); margin: 0; line-height: 1.6; }
 
     /* TAKEAWAYS */
     .takeaways { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
@@ -387,36 +448,88 @@
     </div>
   </section>
 
+  <!-- POLICY PILLARS -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">Report Structure</p>
+      <h2>Organized around Cook County's Policy Pillars</h2>
+      <p>Each district report was structured around Cook County's six strategic Policy Pillars — the framework from the county's official strategic roadmap. Rather than presenting a flat list of metrics, every data point was mapped to a pillar, giving each district report six dedicated pillar pages. A resident could open their district's report, flip to "Healthy Communities," and see exactly what the county was delivering in their area under that priority.</p>
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-title">Open Communities</div>
+          <p>Ensure Cook County provides responsive, transparent services and develops a thriving, professional workforce that reflects the communities served.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">Connected Communities</div>
+          <p>Provide innovative infrastructure that will connect people and communities to increase equity, support economic growth and improve residents' quality of life.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">Safe and Thriving Communities</div>
+          <p>Create safe communities and an equitable and fair legal system for all residents.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">Vital Communities</div>
+          <p>Pursue inclusive economic and community growth by supporting residents, growing business, attracting investment and nurturing talent.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">Sustainable Communities</div>
+          <p>Support healthy, resilient communities that thrive economically, socially and environmentally.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">Healthy Communities</div>
+          <p>Improve the physical, mental, and social well-being of Cook County residents and communities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SCREENSHOTS -->
   <section class="section section-alt">
     <div class="section-inner">
       <p class="section-label">Report Preview</p>
       <h2>Selected pages</h2>
+      <p style="font-size:0.85rem; color:var(--ink-light); margin-bottom:1rem;">Click any image to view full size.</p>
       <div class="screenshots-grid">
-        <div class="screenshot-card">
+
+        <div class="screenshot-card" onclick="openLightbox('images/investments-summary.png', 'Investments summary page')">
           <div class="screenshot-thumb">
-            <!-- Replace with: <img src="images/district-report-cover.png" alt="Report cover" /> -->
-            Add screenshot here
+            <!-- Replace with: <img src="images/investments-summary.png" alt="Investments summary" /> -->
+            <div class="zoom-hint"><span>Click to enlarge</span></div>
+            <span style="color:var(--ink-light);font-size:0.8rem;">Add screenshot here</span>
           </div>
-          <p class="screenshot-caption">Report cover page</p>
+          <p class="screenshot-caption">Investments summary page</p>
         </div>
-        <div class="screenshot-card">
+
+        <div class="screenshot-card" onclick="openLightbox('images/policy-pillar-sample.png', 'Policy pillar page sample')">
           <div class="screenshot-thumb">
-            <!-- Replace with: <img src="images/district-report-metrics.png" alt="Metrics page" /> -->
-            Add screenshot here
+            <!-- Replace with: <img src="images/policy-pillar-sample.png" alt="Policy pillar page" /> -->
+            <div class="zoom-hint"><span>Click to enlarge</span></div>
+            <span style="color:var(--ink-light);font-size:0.8rem;">Add screenshot here</span>
           </div>
-          <p class="screenshot-caption">Department metrics overview</p>
+          <p class="screenshot-caption">Policy pillar page sample</p>
         </div>
-        <div class="screenshot-card">
+
+        <div class="screenshot-card" onclick="openLightbox('images/metrics-sample.png', 'Metrics page sample')">
           <div class="screenshot-thumb">
-            <!-- Replace with: <img src="images/district-report-map.png" alt="District map" /> -->
-            Add screenshot here
+            <!-- Replace with: <img src="images/metrics-sample.png" alt="Metrics page" /> -->
+            <div class="zoom-hint"><span>Click to enlarge</span></div>
+            <span style="color:var(--ink-light);font-size:0.8rem;">Add screenshot here</span>
           </div>
-          <p class="screenshot-caption">District map & geography</p>
+          <p class="screenshot-caption">Metrics page sample</p>
         </div>
+
       </div>
     </div>
   </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightbox-img" src="" alt="" />
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
 
   <!-- TAKEAWAYS -->
   <section class="section">
@@ -445,5 +558,24 @@
     <a class="footer-link" href="https://ckucewicz.github.io">Back to portfolio</a>
   </footer>
 
+  <script>
+    function openLightbox(src, caption) {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = caption;
+      cap.textContent = caption;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (!e || e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox({ target: document.getElementById('lightbox') }); });
+  </script>
 </body>
 </html>
