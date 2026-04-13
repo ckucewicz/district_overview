@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cook County District Overview Report — Chris Kucewicz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FAF8F4;
+      --cream-dark: #F2EFE8;
+      --ink: #1A1A17;
+      --ink-mid: #4A4A44;
+      --ink-light: #8A8A82;
+      --teal: #0F6E56;
+      --teal-light: #E1F5EE;
+      --teal-mid: #1D9E75;
+      --border: rgba(26,26,23,0.10);
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--serif); font-size: 1rem;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-back {
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--ink-mid); text-decoration: none;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-back:hover { color: var(--teal); }
+
+    /* HERO */
+    .hero {
+      background: var(--ink);
+      padding: 5rem 2rem 4rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 40px,
+        rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px
+      );
+    }
+    .hero-inner {
+      max-width: 860px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--teal-mid);
+      background: rgba(29,158,117,0.15);
+      padding: 4px 12px; border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.1; color: #fff;
+      margin-bottom: 1.25rem;
+    }
+    .hero-sub {
+      font-size: 1rem; color: rgba(255,255,255,0.55);
+      max-width: 580px; margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+      padding: 0.6rem 1.25rem; border-radius: 6px;
+      text-decoration: none; transition: all 0.18s;
+    }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: #0d5f49; }
+    .btn-outline { background: transparent; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+    /* META STRIP */
+    .meta-strip {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 2rem;
+    }
+    .meta-inner {
+      max-width: 860px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 2rem;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); }
+    .meta-value { font-size: 0.88rem; color: var(--ink-mid); font-weight: 400; }
+
+    /* SECTIONS */
+    .section { padding: 4rem 2rem; }
+    .section-inner { max-width: 860px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 0.6rem;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      line-height: 1.15; color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+    p { color: var(--ink-mid); margin-bottom: 1rem; font-size: 0.97rem; line-height: 1.75; }
+    p:last-child { margin-bottom: 0; }
+
+    /* CHALLENGE / METHODOLOGY alternating bg */
+    .section-alt { background: #fff; }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--cream-dark);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--serif); font-size: 2rem;
+      color: var(--teal); line-height: 1; margin-bottom: 4px;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--ink-light); }
+
+    /* METHODOLOGY STEPS */
+    .steps { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
+    .step {
+      display: grid; grid-template-columns: 40px 1fr;
+      gap: 1rem; align-items: start;
+    }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 1rem; color: var(--teal);
+      flex-shrink: 0;
+    }
+    .step-content h3 {
+      font-family: var(--serif); font-size: 1rem;
+      color: var(--ink); margin-bottom: 4px;
+    }
+    .step-content p { font-size: 0.88rem; margin-bottom: 0; }
+
+    /* DEPARTMENTS */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .dept-tag {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.6rem 1rem;
+      font-size: 0.82rem; color: var(--ink-mid);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dept-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--teal); flex-shrink: 0;
+    }
+
+    /* SCREENSHOTS */
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem; margin-top: 1.5rem;
+    }
+    .screenshot-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .screenshot-thumb {
+      height: 200px; background: var(--cream-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; color: var(--ink-light);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .screenshot-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .screenshot-caption { padding: 0.75rem 1rem; font-size: 0.82rem; color: var(--ink-mid); }
+
+    /* TAKEAWAYS */
+    .takeaways { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+    .takeaway {
+      background: var(--teal-light);
+      border-left: 3px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+    }
+    .takeaway p { color: var(--ink); font-size: 0.92rem; margin: 0; }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    footer p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-link { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.15s; }
+    .footer-link:hover { color: var(--teal-mid); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .section { padding: 3rem 1.25rem; }
+      .meta-strip { padding: 1rem 1.25rem; }
+      nav { padding: 0 1.25rem; }
+      .btn-row { flex-direction: column; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.65s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.22s; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="https://ckucewicz.github.io">Chris Kucewicz</a>
+    <a class="nav-back" href="https://ckucewicz.github.io/#projects">← Back to portfolio</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <span class="hero-tag fade-up">Data / Policy Analysis · Project Management</span>
+      <h1 class="fade-up delay-1">Cook County District<br>Overview Report</h1>
+      <p class="hero-sub fade-up delay-1">A public-facing impact report delivering district-level performance metrics across Cook County's 17 commissioner districts, built from data collected across dozens of county departments.</p>
+      <div class="btn-row fade-up delay-2">
+        <a class="btn btn-primary" href="https://drive.google.com/file/d/14s_C88uv4ogqdQCPufEePNaYCatSD0J4/view?usp=sharing" target="_blank">📄 View the Report</a>
+        <a class="btn btn-outline" href="https://www.cookcountyil.gov/agency/ROI" target="_blank">Cook County ROI Office</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- META STRIP -->
+  <div class="meta-strip">
+    <div class="meta-inner">
+      <div class="meta-item">
+        <span class="meta-label">Role</span>
+        <span class="meta-value">Project Manager & Data/Policy Analyst</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Organization</span>
+        <span class="meta-value">Cook County Office of ROI</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Timeline</span>
+        <span class="meta-value">Oct 2024 – Oct 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Tools</span>
+        <span class="meta-value">Python · U.S. Census API · InDesign · Excel</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">Overview</p>
+      <h2>Bringing county-wide performance data to constituents</h2>
+      <p>Cook County is the second largest county in the United States, serving over 5 million residents across 17 commissioner districts. Despite a wealth of program and service data collected across dozens of departments, there was no unified, public-facing resource that showed constituents what their county was actually doing in their district.</p>
+      <p>The Cook County District Overview Report was created to fill that gap — and was the <strong>first report of its kind at this scale out of Cook County</strong>. A set of 17 individual district reports totaling 527 pages, its primary goal was to communicate directly to constituents the investments and work the county was doing in each of their districts. No public-facing report had previously broken down county performance data at the commissioner district level.</p>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num">17</div><div class="stat-label">District reports produced</div></div>
+        <div class="stat-card"><div class="stat-num">527</div><div class="stat-label">Total pages</div></div>
+        <div class="stat-card"><div class="stat-num">20+</div><div class="stat-label">Department stakeholders</div></div>
+        <div class="stat-card"><div class="stat-num">1K+</div><div class="stat-label">Data points collected</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE CHALLENGE -->
+  <section class="section section-alt">
+    <div class="section-inner">
+      <p class="section-label">The Challenge</p>
+      <h2>Turning fragmented government data into a unified story</h2>
+      <p>The core challenge was that Cook County departments collect and report data independently, often at different geographic levels and in different formats. Some departments reported at the district level, but many only had data available at the ZIP code level — and ZIP codes don't align cleanly with commissioner district boundaries.</p>
+      <p>Beyond the geographic mismatch, data arrived from over 20 department contacts in varying formats and with inconsistent definitions, requiring extensive auditing, cleaning, and standardization before any analysis could begin. There was no existing data pipeline or data dictionary to build from.</p>
+
+      <div class="dept-grid">
+        <div class="dept-tag"><span class="dept-dot"></span>Cook County Health</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Forest Preserves</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Bureau of Asset Management</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Environment & Sustainability</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Human Rights & Ethics</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Human Resources</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Justice Advisory Council</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Bureau of Economic Development</div>
+        <div class="dept-tag"><span class="dept-dot"></span>Emergency Management</div>
+        <div class="dept-tag"><span class="dept-dot"></span>And more...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">Methodology</p>
+      <h2>From raw departmental data to district-level metrics</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Stakeholder coordination & data collection</h3>
+            <p>Coordinated with 20+ department directors and data contacts across Cook County to define metrics, establish data collection templates, and gather raw program and service data. Created a data dictionary to standardize definitions across departments.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Data audit & quality assessment</h3>
+            <p>Conducted a comprehensive audit of all incoming data, documenting gaps, inconsistencies, and quality issues across departments. Produced a 10-page writeup including SOPs and recommendations for improving future data collection processes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Geographic aggregation using Census population data</h3>
+            <p>For metrics reported at the ZIP code level, applied a population-weighted aggregation methodology using U.S. Census Bureau population data to estimate district-level figures. This involved integrating ACS Census API data, ZIP-level datasets, and Cook County district shapefiles in Python to produce reliable, validated district-level metrics.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>Data cleaning & standardization pipeline</h3>
+            <p>Built Python scripts to clean, standardize, and transform raw departmental data into a consistent format suitable for reporting. Applied QA checks throughout to ensure accuracy and consistency across all 17 district outputs.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>Report design & publication</h3>
+            <p>Used Adobe InDesign to design and produce the final district reports, translating validated data into a visually compelling public-facing format. Each of the 17 district reports followed a consistent layout while surfacing metrics relevant to that district's geography and demographics.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h3>Documentation & project handoff</h3>
+            <p>As a one-year fellow, a key part of the role was ensuring the project could continue after my tenure ended. I created comprehensive documentation for my successor including step-by-step process guides, a metric dictionary, data collection SOPs, and an InDesign training to enable the next analyst to inherit and continue the reporting cycle independently.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="section section-alt">
+    <div class="section-inner">
+      <p class="section-label">Report Preview</p>
+      <h2>Selected pages</h2>
+      <div class="screenshots-grid">
+        <div class="screenshot-card">
+          <div class="screenshot-thumb">
+            <!-- Replace with: <img src="images/district-report-cover.png" alt="Report cover" /> -->
+            Add screenshot here
+          </div>
+          <p class="screenshot-caption">Report cover page</p>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-thumb">
+            <!-- Replace with: <img src="images/district-report-metrics.png" alt="Metrics page" /> -->
+            Add screenshot here
+          </div>
+          <p class="screenshot-caption">Department metrics overview</p>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-thumb">
+            <!-- Replace with: <img src="images/district-report-map.png" alt="District map" /> -->
+            Add screenshot here
+          </div>
+          <p class="screenshot-caption">District map & geography</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAYS -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">Key Takeaways</p>
+      <h2>What this project demonstrated</h2>
+      <div class="takeaways">
+        <div class="takeaway">
+          <p>Government data is rarely ready to use. Producing accurate district-level metrics required building a custom aggregation methodology from scratch, combining Python, Census API data, and geospatial shapefiles to bridge the gap between ZIP-level reporting and district boundaries.</p>
+        </div>
+        <div class="takeaway">
+          <p>Stakeholder management is as important as technical execution. Coordinating 20+ department contacts, each with different data systems, timelines, and definitions, required clear communication, structured templates, and persistent follow-up throughout the project lifecycle.</p>
+        </div>
+        <div class="takeaway">
+          <p>Data documentation matters. Creating a data dictionary and SOPs from the ground up not only ensured consistency across 17 reports but left the office with reusable infrastructure for future reporting cycles.</p>
+        </div>
+        <div class="takeaway">
+          <p>Building something new means building it to last. As the first report of its kind at this scale out of Cook County, the project required not just execution but institutional design — creating the training materials, process guides, and documentation needed so the work could continue well beyond a one-year fellowship.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Chris Kucewicz</p>
+    <a class="footer-link" href="https://ckucewicz.github.io">Back to portfolio</a>
+  </footer>
+
+</body>
+</html>
