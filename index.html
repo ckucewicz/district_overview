@@ -42,20 +42,43 @@
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
       display: flex; align-items: center; justify-content: space-between;
-      height: 56px;
+      height: 56px; gap: 1rem;
     }
     .nav-logo {
       font-family: var(--serif); font-size: 1rem;
-      color: var(--ink); text-decoration: none;
+      color: var(--ink); text-decoration: none; white-space: nowrap;
     }
-    .nav-back {
-      font-size: 0.82rem; font-weight: 500;
+    .nav-links {
+      display: flex; align-items: center; gap: 1.5rem;
+      list-style: none; flex: 1; justify-content: center;
+    }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 500;
       color: var(--ink-mid); text-decoration: none;
       letter-spacing: 0.04em; text-transform: uppercase;
-      transition: color 0.2s;
+      transition: color 0.2s; white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-back {
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--ink-mid); text-decoration: none;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s; white-space: nowrap;
       display: flex; align-items: center; gap: 6px;
     }
     .nav-back:hover { color: var(--teal); }
+    .hamburger {
+      display: none; flex-direction: column;
+      justify-content: center; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--ink); border-radius: 2px; transition: all 0.25s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* HERO */
     .hero {
@@ -265,11 +288,12 @@
       border-radius: 12px; padding: 1.25rem;
       border-top: 3px solid var(--teal);
     }
-    .pillar-card:nth-child(2) { border-top-color: #1A56DB; }
-    .pillar-card:nth-child(3) { border-top-color: #C0392B; }
-    .pillar-card:nth-child(4) { border-top-color: #D4A017; }
-    .pillar-card:nth-child(5) { border-top-color: #6B3FA0; }
-    .pillar-card:nth-child(6) { border-top-color: #E67E22; }
+    .pillar-card { border-top-color: #C4892A; }
+    .pillar-card:nth-child(2) { border-top-color: #1A7D8C; }
+    .pillar-card:nth-child(3) { border-top-color: #1B2F5E; }
+    .pillar-card:nth-child(4) { border-top-color: #6B7280; }
+    .pillar-card:nth-child(5) { border-top-color: #5A7A2E; }
+    .pillar-card:nth-child(6) { border-top-color: #B5451B; }
     .pillar-title {
       font-family: var(--serif); font-size: 1rem;
       color: var(--ink); margin-bottom: 0.5rem;
@@ -296,12 +320,36 @@
     .footer-link { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.15s; }
     .footer-link:hover { color: var(--teal-mid); }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .hero { padding: 3.5rem 1.25rem 3rem; }
       .section { padding: 3rem 1.25rem; }
       .meta-strip { padding: 1rem 1.25rem; }
+      .meta-inner { gap: 1rem; }
       nav { padding: 0 1.25rem; }
-      .btn-row { flex-direction: column; }
+      .btn-row { flex-direction: column; align-items: flex-start; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .steps .step { grid-template-columns: 32px 1fr; gap: 0.75rem; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: 1fr; }
+
+      .nav-links {
+        display: none; flex-direction: column;
+        position: absolute; top: 56px; left: 0; right: 0;
+        background: rgba(250,248,244,0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 0; z-index: 99; gap: 0;
+        justify-content: flex-start;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block; padding: 0.85rem 1.5rem;
+        font-size: 0.9rem; border-bottom: 1px solid var(--border);
+      }
+      .nav-links li:last-child a { border-bottom: none; }
+      .hamburger { display: flex; }
+      .nav-back span { display: none; }
     }
 
     @keyframes fadeUp {
@@ -317,7 +365,18 @@
 
   <nav>
     <a class="nav-logo" href="https://ckucewicz.github.io">Chris Kucewicz</a>
-    <a class="nav-back" href="https://ckucewicz.github.io/#projects">← Back to portfolio</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#challenge">Challenge</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#pillars">Policy Pillars</a></li>
+      <li><a href="#preview">Preview</a></li>
+      <li><a href="#takeaways">Takeaways</a></li>
+    </ul>
+    <a class="nav-back" href="https://ckucewicz.github.io/#projects">← <span>Back to portfolio</span></a>
   </nav>
 
   <!-- HERO -->
@@ -355,13 +414,13 @@
     </div>
   </div>
 
-  <!-- OVERVIEW -->
-  <section class="section">
+  
+  <section class="section" id="overview">
     <div class="section-inner">
       <p class="section-label">Overview</p>
       <h2>Bringing county-wide performance data to constituents</h2>
       <p>Cook County is the second largest county in the United States, serving over 5 million residents across 17 commissioner districts. Despite a wealth of program and service data collected across dozens of departments, there was no unified, public-facing resource that showed constituents what their county was actually doing in their district.</p>
-      <p>The Cook County District Overview Report was created to fill that gap — and was the <strong>first report of its kind at this scale out of Cook County</strong>. A set of 17 individual district reports totaling 527 pages, its primary goal was to communicate directly to constituents the investments and work the county was doing in each of their districts. No public-facing report had previously broken down county performance data at the commissioner district level.</p>
+      <p>The Cook County District Overview Report was created to fill that gap, and was the <strong>first report of its kind at this scale out of Cook County</strong>. A set of 17 individual district reports totaling 527 pages, its primary goal was to communicate directly to constituents the investments and work the county was doing in each of their districts. No public-facing report had previously broken down county performance data at the commissioner district level.</p>
 
       <div class="stats-row">
         <div class="stat-card"><div class="stat-num">17</div><div class="stat-label">District reports produced</div></div>
@@ -373,11 +432,11 @@
   </section>
 
   <!-- THE CHALLENGE -->
-  <section class="section section-alt">
+  <section class="section section-alt" id="challenge">
     <div class="section-inner">
       <p class="section-label">The Challenge</p>
       <h2>Turning fragmented government data into a unified story</h2>
-      <p>The core challenge was that Cook County departments collect and report data independently, often at different geographic levels and in different formats. Some departments reported at the district level, but many only had data available at the ZIP code level — and ZIP codes don't align cleanly with commissioner district boundaries.</p>
+      <p>The core challenge was that Cook County departments collect and report data independently, often at different geographic levels and in different formats. Some departments reported at the district level, but many only had data available at the ZIP code level. ZIP codes don't align cleanly with commissioner district boundaries, which required a custom aggregation approach.</p>
       <p>Beyond the geographic mismatch, data arrived from over 20 department contacts in varying formats and with inconsistent definitions, requiring extensive auditing, cleaning, and standardization before any analysis could begin. There was no existing data pipeline or data dictionary to build from.</p>
 
       <div class="dept-grid">
@@ -396,7 +455,7 @@
   </section>
 
   <!-- METHODOLOGY -->
-  <section class="section">
+  <section class="section" id="methodology">
     <div class="section-inner">
       <p class="section-label">Methodology</p>
       <h2>From raw departmental data to district-level metrics</h2>
@@ -449,11 +508,11 @@
   </section>
 
   <!-- POLICY PILLARS -->
-  <section class="section">
+  <section class="section" id="pillars">
     <div class="section-inner">
       <p class="section-label">Report Structure</p>
       <h2>Organized around Cook County's Policy Pillars</h2>
-      <p>Each district report was structured around Cook County's six strategic Policy Pillars — the framework from the county's official strategic roadmap. Rather than presenting a flat list of metrics, every data point was mapped to a pillar, giving each district report six dedicated pillar pages. A resident could open their district's report, flip to "Healthy Communities," and see exactly what the county was delivering in their area under that priority.</p>
+      <p>Each district report was structured around Cook County's six strategic Policy Pillars, the framework from the county's official strategic roadmap. Rather than presenting a flat list of metrics, every data point was mapped to a pillar, giving each district report six dedicated pillar pages. A resident could open their district's report, flip to "Healthy Communities," and see exactly what the county was delivering in their area under that priority.</p>
       <div class="pillars-grid">
         <div class="pillar-card">
           <div class="pillar-title">Open Communities</div>
@@ -484,7 +543,7 @@
   </section>
 
   <!-- SCREENSHOTS -->
-  <section class="section section-alt">
+  <section class="section section-alt" id="preview">
     <div class="section-inner">
       <p class="section-label">Report Preview</p>
       <h2>Selected pages</h2>
@@ -532,7 +591,7 @@
   </div>
 
   <!-- TAKEAWAYS -->
-  <section class="section">
+  <section class="section" id="takeaways">
     <div class="section-inner">
       <p class="section-label">Key Takeaways</p>
       <h2>What this project demonstrated</h2>
@@ -547,7 +606,7 @@
           <p>Data documentation matters. Creating a data dictionary and SOPs from the ground up not only ensured consistency across 17 reports but left the office with reusable infrastructure for future reporting cycles.</p>
         </div>
         <div class="takeaway">
-          <p>Building something new means building it to last. As the first report of its kind at this scale out of Cook County, the project required not just execution but institutional design — creating the training materials, process guides, and documentation needed so the work could continue well beyond a one-year fellowship.</p>
+          <p>Building something new means building it to last. As the first report of its kind at this scale out of Cook County, the project required not just execution but institutional design. Creating the training materials, process guides, and documentation needed ensured the work could continue well beyond a one-year fellowship.</p>
         </div>
       </div>
     </div>
@@ -576,6 +635,19 @@
       }
     }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox({ target: document.getElementById('lightbox') }); });
+
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
   </script>
 </body>
 </html>
